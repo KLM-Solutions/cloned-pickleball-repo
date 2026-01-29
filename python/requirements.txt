@@ -1,0 +1,15 @@
+# MediaPipe Video Annotation Server - Dependencies
+
+# Core
+opencv-python>=4.8.0
+numpy>=1.24.0
+mediapipe>=0.10.0
+
+# Server
+flask>=3.0.0
+flask-cors>=4.0.0
+python-dotenv>=1.0.0
+
+# HTTP
+httpx>=0.25.0
+requests>=2.28.0

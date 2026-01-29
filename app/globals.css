@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  
+  /* Brand Colors */
+  --primary: #00BFA5;      /* Energetic Teal */
+  --primary-dark: #008f7a;
+  --secondary: #1A237E;    /* Deep Navy */
+  --accent: #FF6F00;       /* Warning Orange */
+  --success: #00C853;      /* Success Green */
+  
+  /* UI Colors */
+  --surface: #F5F5F5;
+  --surface-highlight: #ffffff;
+  --border: #e5e5e5;
+  --text-primary: #1A237E; /* Navy for primary text for high contrast/brand alignment */
+  --text-secondary: #666666;
+  
+  /* Mobile-Responsive Spacing */
+  --spacing-mobile: 1rem;
+  --spacing-tablet: 1.5rem;
+  --spacing-desktop: 2rem;
+  
+  /* Touch-Friendly Sizing */
+  --touch-target-min: 44px;
+  --touch-spacing-min: 8px;
+  
+  /* Safe Area Insets (for notched devices) */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-surface: var(--surface);
+  --color-surface-highlight: var(--surface-highlight);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --surface: #171717;
+    --surface-highlight: #262626;
+    --border: #333333;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    /* Brand colors remain similar but might need slight adjustment for contrast if needed, 
+       but standard vibrant colors often work well on dark. */
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Override Next.js portal positioning */
+nextjs-portal {
+  left: unset !important;
+  top: unset !important;
+}
+
+/* Mobile-Optimized Typography */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px; /* Prevent zoom on iOS */
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+/* Touch-Friendly Utilities */
+.touch-target {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* Safe Area Support */
+.pb-safe {
+  padding-bottom: calc(1rem + var(--safe-area-bottom));
+}

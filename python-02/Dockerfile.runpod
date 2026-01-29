@@ -1,0 +1,70 @@
+# =============================================================================
+# RunPod Serverless Dockerfile - MediaPipe Video Analysis Worker
+# =============================================================================
+# This deploys the MediaPipe video analysis service to RunPod Serverless
+#
+# Build:
+#   docker build -f Dockerfile.runpod -t yourusername/mediapipe-worker:latest .
+#
+# Push:
+#   docker push yourusername/mediapipe-worker:latest
+# =============================================================================
+
+# Base: RunPod PyTorch image with CUDA (same as main project)
+FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
+
+WORKDIR /app
+
+# Install system dependencies (including MediaPipe requirements)
+RUN apt-get update --fix-missing && \
+    apt-get install -y --no-install-recommends \
+    ffmpeg \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libxcb1 \
+    libx11-6 \
+    libgomp1 \
+    libusb-1.0-0 \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Copy Python requirements and install (ignore pre-installed packages)
+COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --ignore-installed -r requirements.txt
+
+# Reinstall mediapipe with proper dependencies (version 0.10.14)
+RUN pip uninstall -y mediapipe && \
+    pip install --no-cache-dir mediapipe==0.10.14
+
+# Verify mediapipe installation
+RUN python -c "import mediapipe as mp; print('MediaPipe version:', mp.__version__)"
+
+# Create models directory
+RUN mkdir -p /app/models
+
+# Download MediaPipe Pose Landmarker model
+RUN curl -L -o /app/models/pose_landmarker_heavy.task \
+    https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
+
+# CACHE BUSTER - Forces fresh copy of code every build
+# Change this value to force a rebuild
+ARG CACHEBUST=1
+RUN echo "Cache bust: $CACHEBUST"
+
+# Copy application code
+COPY . .
+
+# Environment
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+# RunPod serverless entrypoint
+CMD ["python", "-u", "handler.py"]
+
+# Deployment Version Tracker
+LABEL org.opencontainers.image.version="1.0.0-mediapipe"

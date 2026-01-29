@@ -1,0 +1,20 @@
+# Core Dependencies
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# MediaPipe (same version as original)
+mediapipe>=0.10.0
+
+# Server (for local development)
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.28.0
+
+# Supabase uploads
+httpx>=0.25.0
+
+# RunPod Serverless
+runpod>=1.6.0

@@ -1,0 +1,41 @@
+{
+  "name": "strikesense",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.36.7",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
+    "@sparticuz/chromium-min": "^143.0.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "@types/canvas-confetti": "^1.9.0",
+    "canvas-confetti": "^1.9.4",
+    "lucide-react": "^0.556.0",
+    "next": "16.0.7",
+    "openai": "^6.15.0",
+    "puppeteer-core": "^24.34.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-markdown": "^9.0.1",
+    "svix": "^1.84.1",
+    "three": "^0.182.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.7",
+    "playwright": "^1.57.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

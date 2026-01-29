@@ -1,0 +1,60 @@
+# GitHub Actions workflow to build and push RunPod Docker image
+# Triggers on push to main branch when python/ or Dockerfile.runpod changes
+
+name: Build RunPod Worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'python/**'
+      - 'Dockerfile.runpod'
+      - '.github/workflows/docker-runpod.yml'
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/strikesense-worker
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+            type=raw,value=1.3.0
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.runpod
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Output image URL
+        run: |
+          echo "🚀 Image pushed to: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          echo "📦 Update RunPod with this image URL:"
+          echo "   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"

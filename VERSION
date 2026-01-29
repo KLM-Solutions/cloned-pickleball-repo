@@ -1,0 +1,6 @@
+v1.0.0-smart-brain
+- Implemented Smart Detection for Serve, Groundstroke, Dink
+- Added Target Bias and Forced Fallback
+- Added Recreational Rules (Relaxed Knees/Shoulders)
+- Verified Peak Velocity Logic
+- Cloud-Ready Docker Configuration
