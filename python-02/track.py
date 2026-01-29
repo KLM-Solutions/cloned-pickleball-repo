@@ -26,6 +26,9 @@ class NormalizedLandmark:
         self.z = float(z)
         self.visibility = float(visibility)
 
+    def HasField(self, field_name):
+        return hasattr(self, field_name)
+
 class NormalizedLandmarkList:
     def __init__(self):
         self.landmark = []
@@ -88,8 +91,14 @@ class VideoAnnotator:
         try:
             # Simple heuristic or just try setting it. 
             # If we are on RunPod, we definitely want GPU.
-            if os.environ.get("RUNPOD_POD_ID") or os.environ.get("CUDA_VISIBLE_DEVICES"):
-                print("Configuring MediaPipe for GPU...")
+            cuda_visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+            if os.environ.get("RUNPOD_POD_ID") or cuda_visible is not None:
+                # User request: "cuda = 0, only gpu" -> Ensure we target device 0 if generic
+                if cuda_visible is None:
+                    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+                    cuda_visible = "0"
+                
+                print(f"Configuring MediaPipe for GPU (CUDA_VISIBLE_DEVICES={cuda_visible})...")
                 base_options.delegate = python.BaseOptions.Delegate.GPU
             else:
                 print("Configuring MediaPipe for CPU (default)...")

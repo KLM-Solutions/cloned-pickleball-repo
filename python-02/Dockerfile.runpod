@@ -53,7 +53,7 @@ RUN curl -L -o /app/models/pose_landmarker_heavy.task \
 
 # CACHE BUSTER - Forces fresh copy of code every build
 # Change this value to force a rebuild
-ARG CACHEBUST=1
+ARG CACHEBUST=2
 RUN echo "Cache bust: $CACHEBUST"
 
 # Copy application code
