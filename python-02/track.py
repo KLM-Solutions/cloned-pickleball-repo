@@ -29,6 +29,8 @@ class NormalizedLandmark:
 class NormalizedLandmarkList:
     def __init__(self):
         self.landmark = []
+
+class NumpyEncoder(json.JSONEncoder):
     """Custom encoder for numpy data types"""
     def default(self, obj):
         if isinstance(obj, np.integer):
